@@ -7,11 +7,12 @@ import {
     TouchableOpacity,
     FlatList,
     ActivityIndicator,
+    Image
 } from 'react-native'
 import  Ionicons  from 'react-native-vector-icons/FontAwesome'
 import Header from '../components/Header'
 import {useDispatch, useSelector} from 'react-redux'
-import {getUsersRequest, getMoreUsersRequest,getTutorialsRequest, findUserByLogin} from "../actions";
+import {getUsersRequest, getMoreUsersRequest} from "../actions";
 
 function ListView({ navigation }) {
 
@@ -23,7 +24,6 @@ function ListView({ navigation }) {
 
     useEffect(() => {
         dispatch(getUsersRequest(0));
-        dispatch(getTutorialsRequest());
 
         const unsubscribe = navigation.addListener('focus', () => {
             setUsersPage(0);
@@ -54,16 +54,42 @@ function ListView({ navigation }) {
               data={usersItems.data}
               renderItem={({item}) => (
                   <View style={styles.listItemContainer}>
+                      {item?.imageData ? (
+                          item?.imageData === '/static/media/default-img.48897ad4.jpg' ? (
+                              <Image
+                                  source={require('../assets/default-img.jpg')}
+                                  style={styles.itemImage}
+                              />
+                          ) : (
+                              <Image
+                                  source={{
+                                      uri: item.imageData,
+                                  }}
+                                  style={styles.itemImage}
+                              />
+                          )
+                      ) : (
+                          <Image
+                              source={require('../assets/default-img.jpg')}
+                              style={styles.itemImage}
+                          />
+                      )}
                       <Text style={styles.itemTitle} numberOfLines={1}>
                           {item.login}
-                          <View style={styles.userContainer}>
-                              <TouchableOpacity
-                                  onPress={() => navigation.navigate('EditUserModal', item)}
-                                  style={styles.userButton}>
-                                  <Ionicons name='edit' color='#fff' size={10} />
-                              </TouchableOpacity>
-                          </View>
+
                       </Text>
+                      <View style={styles.userContainer}>
+                          <TouchableOpacity
+                              onPress={() => navigation.navigate('EditUserModal', item)}
+                              style={styles.userButton}>
+                              <Ionicons name='edit' color='#fff' size={20} />
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                              onPress={() => navigation.navigate('DeleteUserModal', item.id)}
+                              style={styles.userButton}>
+                              <Ionicons name='close' color='#fff' size={20} />
+                          </TouchableOpacity>
+                      </View>
                   </View>
               )}
               onEndReachedThreshold={0.005}
@@ -83,11 +109,13 @@ function ListView({ navigation }) {
 }
 
 function UsersListScreen({ navigation }) {
+    const usersItems = useSelector(state => state.users)
+
     return (
         <>
             <StatusBar barStyle='light-content' />
             <View style={styles.container}>
-                <Header title={'List'} />
+                <Header title={'Users List'} totalItems={usersItems.totalUsers} />
                 <ListView navigation={ navigation } />
                 <View style={styles.fabContainer}>
                     <TouchableOpacity
@@ -114,7 +142,7 @@ const styles = StyleSheet.create({
         bottom: 20
     },
     fabButton: {
-        backgroundColor: 'blue',
+        backgroundColor: 'grey',
         borderRadius: 30,
         width: 60,
         height: 60,
@@ -125,16 +153,14 @@ const styles = StyleSheet.create({
     userContainer: {
         justifyContent: 'flex-end',
         flexDirection: 'row',
-        position: 'absolute',
-        right: 10,
-        bottom: 20
     },
     userButton: {
         backgroundColor: 'blue',
         borderRadius: 2,
-        width: 20,
-        height: 20,
+        width: 40,
+        height: 40,
         alignItems: 'center',
+        margin: 3,
         justifyContent: 'center'
     },
     listItemContainer: {
@@ -144,12 +170,19 @@ const styles = StyleSheet.create({
         paddingBottom: 5,
         paddingRight: 5,
         justifyContent: 'space-between',
-        width: '80%',
+        width: '100%',
         borderBottomWidth: 0.25
     },
     itemTitle: {
         fontSize: 22,
-        fontWeight: '400'
+        fontWeight: '400',
+        margin: 2,
+    },
+    itemImage: {
+        width: 25,
+        height: 25,
+        margin: 1,
+        flexDirection: 'row',
     }
 })
 export default UsersListScreen

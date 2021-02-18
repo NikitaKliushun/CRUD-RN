@@ -1,14 +1,9 @@
-import React, {useEffect, useState} from 'react'
+import React from 'react'
 import { StyleSheet, TouchableOpacity, Text, View, TextInput } from 'react-native'
 import  Ionicons  from 'react-native-vector-icons/FontAwesome'
-import { useDispatch } from 'react-redux'
 import ValidationForm from '../components/ValidationForm'
-import DefaultImg from '../assets/default-img.jpg'
-import {updateUserImgToPush} from "../actions";
 
 function EditUserModalScreen({ route, navigation }) {
-    const [value, setValue] = useState("");
-    const dispatch = useDispatch()
 
     return (
         <View style={styles.container}>
