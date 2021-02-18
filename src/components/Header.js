@@ -1,14 +1,13 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
-import { useSelector } from 'react-redux'
 
 function Header(props) {
-    const { title } = props
+    const { title, totalItems } = props
 
     return (
         <View style={styles.container}>
             <Text style={styles.text}>{title}</Text>
-            <Text style={styles.subTitle}>Left: 0</Text>
+            <Text style={styles.subTitle}>Total items: {totalItems}</Text>
         </View>
     )
 }

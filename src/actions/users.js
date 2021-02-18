@@ -18,6 +18,9 @@ import {
             INIT_DATA_STATE,
             UPDATE_USERTOPUSH,
             UPDATE_USERIMGTOPUSH,
+            DELETE_USER,
+            DELETE_USER_FAIL,
+            DELETE_USER_SUCCESS
        } from '../constants';
 import axios from 'axios';
 
@@ -28,7 +31,7 @@ export const getUsersRequest = (usersPage) => {
             const data = await fetch(`http://192.168.100.27:8080/api/users?size=15&page=${usersPage}`);
             const users = await data.json();
             console.log('users-----------', users, data);
-            dispatch({type: GET_USERS_SUCCESS, payload: users.users, totalUsersPages: users.totalPages, loading: false})
+            dispatch({type: GET_USERS_SUCCESS, payload: users.users, totalUsersPages: users.totalPages, totalUsers: users.totalItems, loading: false})
         } catch(error) {
             console.log('Getting Users Error---------', error);
             dispatch({type: GET_USERS_FAIL, payload: error, loading: false})
@@ -57,10 +60,6 @@ export const addUserRequest = (userData) => {
             console.log('userData at action',userData);
             dispatch({type: ADD_USER, loading: true});
             const data = await axios.post('http://192.168.100.27:8080/api/users', userData);
-            //const data = await fetch('http://192.168.100.27:8080/api/users', userData);
-          //  const responseAPI = await data.json();
-          //  console.log('responseAPI',responseAPI);
-          //  console.log('responseAPI-----------', responseAPI);
             dispatch({type: ADD_USER_SUCCESS, loading: false})
         } catch(error) {
             console.log('Adding User Error---------', error);
@@ -121,4 +120,17 @@ export const updateUserToPush = (userData) => {
 
 export const updateUserImgToPush = (userImg) => {
     return {type: UPDATE_USERIMGTOPUSH, payload: userImg};
+}
+
+export const deleteUserRequest = (userID) => {
+    return async dispatch => {
+        try {
+            dispatch({type: DELETE_USER, loading: true, error: false});
+            const data = await axios.delete(`http://192.168.100.27:8080/api/users/${userID}`);
+            dispatch({type: DELETE_USER_SUCCESS, loading: false, error: false})
+        } catch(error) {
+            console.log('Deleting User Error---------', error);
+            dispatch({type: DELETE_USER_FAIL, payload: error, loading: false})
+        }
+    }
 }

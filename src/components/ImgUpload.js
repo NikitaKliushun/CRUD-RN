@@ -9,49 +9,52 @@ import {
 } from 'react-native';
 
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {initUserState, updateUserImgToPush} from "../actions";
+import {updateUserImgToPush} from "../actions";
 import {useDispatch, useSelector} from "react-redux";
 
 const ImgUpload = () => {
-//    const [filePath, setFilePath] = useState('');
     const dispatch = useDispatch();
     const user = useSelector(state => state.users);
-
-//    dispatch(updateUserImgToPush(initImg));
+    const [imgSize,setImgSize] = useState(0);
 
     const chooseFileFromLib = () => {
         const options = {
             includeBase64: true,
-            maxWidth: 1080,
+            maxWidth: 600,
             mediaType: 'photo',
         };
 
         launchImageLibrary(options,(result) => {
             console.log('result: ', result);
-        //    setFilePath(result.base64);
-            dispatch(updateUserImgToPush(result.base64));
+            setImgSize(result.fileSize);
+            if (result.fileSize < 10000) {
+                dispatch(updateUserImgToPush(result.base64));
+            }
         })
     };
 
     const fileFromCamera = () => {
         const options = {
             includeBase64: true,
-            maxWidth: 1080,
+            maxWidth: 600,
             mediaType: 'photo',
         };
 
         launchCamera(options, (result) => {
             console.log('result: ', result);
-        //    setFilePath(result.base64);
-            dispatch(updateUserImgToPush(result).base64);
+            setImgSize(result.fileSize);
+            if (result.fileSize < 10240) {
+                dispatch(updateUserImgToPush(result.base64));
+            }
         });
 
     };
 
-//    console.log(filePath);
 
     return (
         <SafeAreaView style={{flex: 1}}>
+            {imgSize > 10240 ? (<Text>Your image exceed max image size (10kB)</Text>) : (<Text>Max size of image is 10kB</Text>)}
+
             <View style={styles.container}>
                 {user.userImgToPush ?
                 <Image
@@ -65,16 +68,6 @@ const ImgUpload = () => {
                     source={require('../assets/default-img.jpg')}
                     style={styles.imageStyle}
                 />}
-
-                {/*filePath ? <Image
-                    source={{
-                        uri: 'data:image/jpeg;base64,' + filePath,
-                    }}
-                    style={styles.imageStyle}
-                /> : <Image
-                    source={require('../assets/default-img.jpg')}
-                    style={styles.imageStyle}
-                />*/}
 
                 <TouchableOpacity
                     activeOpacity={0.5}

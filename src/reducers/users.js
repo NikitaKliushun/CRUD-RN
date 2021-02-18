@@ -18,16 +18,21 @@ import {
     INIT_DATA_STATE,
     UPDATE_USERTOPUSH,
     UPDATE_USERIMGTOPUSH,
+    DELETE_USER,
+    DELETE_USER_SUCCESS,
+    DELETE_USER_FAIL,
 } from '../constants';
 
 const initialState = {
     //Have a users array responsible for getting the data and setting to the array.
     data: [],
-    // Have a number of all users in DB
+    // Have a number of all users' pages in DB
     totalUsersPages: undefined,
+    // Have a number of all users in DB
+    totalUsers: 0,
     //Have the loading state indicate if it's done getting data.
     loading: true,
-    //Have state for error message for recieving an error.
+    //Have state for error message for receiving an error.
     errorMessage: '',
     // Have the loading state indicate if it's done getting more users.
     moreUsersLoading: false,
@@ -51,6 +56,10 @@ const initialState = {
     userCreateLoading: true,
     // Field indicates the error of creating User request
     userCreateError: false,
+    // Field indicates the loading of deleting User request
+    userDeleteLoading: false,
+    // Field indicates the error of deleting User request
+    userDeleteError: false,
 }
 
 
@@ -59,7 +68,7 @@ export default (state = initialState, action) => {
         case GET_USERS:
             return {...state, loading: action.loading};
         case GET_USERS_SUCCESS:
-            return {...state, data: action.payload, totalUsersPages: action.totalUsersPages, loading: action.loading};
+            return {...state, data: action.payload, totalUsersPages: action.totalUsersPages, totalUsers:action.totalUsers, loading: action.loading};
         case GET_USERS_FAIL:
             return {...state, errorMessage: action.payload, loading: action.loading};
         case GET_MORE_USERS:
@@ -78,6 +87,12 @@ export default (state = initialState, action) => {
             return {...state, userCreateLoading: action.loading, userCreateError: false};
         case ADD_USER_FAIL:
             return {...state, userCreateError: action.payload, userCreateLoading: action.loading};
+        case DELETE_USER:
+            return {...state, userDeleteLoading: action.loading, userDeleteError: action.error};
+        case DELETE_USER_SUCCESS:
+            return {...state, userDeleteLoading: action.loading, userDeleteError: action.error};
+        case DELETE_USER_FAIL:
+            return {...state, userDeleteError: action.payload, userDeleteLoading: action.loading};
         case UPDATE_USER:
             return {...state, userUpdateLoading: action.loading};
         case UPDATE_USER_SUCCESS:

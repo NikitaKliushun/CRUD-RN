@@ -5,7 +5,7 @@ const initialState = {
     data: [],
     //Have the loading state indicate if it's done getting data.
     loading: true,
-    //Have state for error message for recieving an error.
+    //Have state for error message for receiving an error.
     errorMessage: '',
 }
 

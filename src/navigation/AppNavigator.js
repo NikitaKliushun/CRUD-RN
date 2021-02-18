@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import UsersListScreen from '../screens/UsersListScreen'
 import AddUserModalScreen from '../screens/AddUserModalScreen'
 import EditUserModalScreen from '../screens/EditUserModalScreen'
+import DeleteUserModalScreen from '../screens/DeleteUserModalScreen'
 
 const Stack = createStackNavigator()
 function MainStackNavigator() {
@@ -35,6 +36,7 @@ function MainStackNavigator() {
                 <Stack.Screen name='UsersList' component={UsersListScreen} />
                 <Stack.Screen name='AddUserModal' component={AddUserModalScreen} />
                 <Stack.Screen name='EditUserModal' component={EditUserModalScreen} />
+                <Stack.Screen name='DeleteUserModal' component={DeleteUserModalScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     )

@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from 'react'
-import { StyleSheet, TouchableOpacity, Text, View, TextInput } from 'react-native'
+import React, {useEffect} from 'react'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import  Ionicons  from 'react-native-vector-icons/FontAwesome'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import ValidationForm from '../components/ValidationForm'
 import DefaultImg from '../assets/default-img.jpg'
-import {getTutorialsRequest, getUsersRequest, updateUserImgToPush, updateUserToPush} from "../actions";
+import {updateUserImgToPush} from "../actions";
 
 const initialValues = {
     age: "10",
@@ -18,7 +18,6 @@ const initialValues = {
 
 
 function AddUserModalScreen({ navigation }) {
-    const [value, setValue] = useState("");
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(updateUserImgToPush(undefined));
@@ -33,7 +32,6 @@ function AddUserModalScreen({ navigation }) {
                         onPress={() => {
                             navigation.goBack();
                             dispatch(updateUserImgToPush(undefined));
-                           // dispatch(updateUserToPush(undefined));
                         } }>
                         <Ionicons name='close' color='#101010' size={40} />
                     </TouchableOpacity>
